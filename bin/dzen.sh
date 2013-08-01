@@ -1,0 +1,1 @@
+../dzen/dzen.sh
