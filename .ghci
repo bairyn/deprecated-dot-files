@@ -1,0 +1,40 @@
+:set prompt "λ> "
+:set -XNoImplicitPrelude
+import Prelude hiding (id, (.))
+import Control.Applicative
+import Control.Arrow
+import Control.Category
+import Control.Lens
+import Control.Monad
+import Control.Proxy
+import Control.Proxy.Prelude
+import Data.Either
+import Data.Function hiding (id, (.))
+import Data.List
+import Data.Maybe
+import Data.Monoid
+import Data.Ratio
+import System.Cmd
+import System.Environment
+import System.Exit
+import System.FilePath
+import System.Random
+import Test.QuickCheck
+import qualified Text.PrettyPrint.ANSI.Leijen as PP
+import Text.Printf
+import Text.Regex.PCRE
+:set -XArrows
+:set -XTemplateHaskell
+:set -Wall
+:set -fno-warn-name-shadowing
+:set -fno-warn-type-defaults
+
+-- Note: If conflicts consider removing these:
+-- Control.Lens
+
+-- Definitions
+--let interactP p = runProxy $ promptS >-> p >-> promptC
+--let mapLines f = interactP $ mapD f
+
+:l ~/.cabal/Util.hs
+:set -interactive-print=myPrint
