@@ -560,6 +560,8 @@ nnoremap <ESC>v <C-w>v
 nnoremap <ESC>q <C-w>q
 nnoremap <ESC>+ <C-w>+
 nnoremap <ESC>- <C-w>-
+nnoremap <ESC>> <C-w>>
+nnoremap <ESC>< <C-w><
 
 " See line 74
 "imap <Nul> <Esc><Esc>n
