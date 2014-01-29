@@ -8,6 +8,7 @@ import Control.Lens
 import Control.Monad
 import Control.Proxy
 import Control.Proxy.Prelude
+import Data.Char
 import Data.Either
 import Data.Function hiding (id, (.))
 import Data.List
