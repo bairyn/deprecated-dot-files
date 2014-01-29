@@ -13,6 +13,7 @@ import Data.Function hiding (id, (.))
 import Data.List
 import Data.Maybe
 import Data.Monoid
+import Data.Ord
 import Data.Ratio
 import System.Cmd
 import System.Environment
