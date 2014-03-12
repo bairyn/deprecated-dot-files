@@ -50,6 +50,7 @@ main = xmonad =<< (dzenBar . withUrgencyHookC dzenUrgencyHook urgency $ xmonadCo
                   , "Graphics 1"  -- primarily gimp
                   , "Private 1"
                   , "Administration"
+                  , "co'e pe'a"
                   ]
               --, numlockMask        = mod2Mask
               , modMask            = mod4Mask
@@ -154,7 +155,8 @@ toggleStatusBar = do
 
 -- | Used by 'startup' to start xflux
 zipCode :: String
-zipCode = "83263"
+--zipCode = "83263"
+zipCode = "94704"
 
 --- STARTUP ---
 -- Some of .xinitrc can be moved here, but be aware that this action is executed each time xmonad is started or restarted.  Don't use 'spawn' if you care about how it terminates or want to block until it terminates.
@@ -171,14 +173,18 @@ startup = do
     spawn $ "xset m 0 0"
 
     -- Use programmer dvorak key layout, and map ctrl to left control, since caps lock is so useless
-    --spawn $ "setxkbmap -layout us -variant dvp -option compose:menu -option keypad:atm -option numpad:shift3 -option kpdl:semi -option ctrl:nocaps"
-    --spawn $ "setxkbmap -layout us -variant dvp -option compose:menu -option ctrl:nocaps"
-    --spawn $ "setxkbmap -layout us -variant dvp -option compose:menu -option ctrl:nocaps -option lv3:ralt_switch"
+    ----spawn $ "setxkbmap -layout us -variant dvp -option compose:menu -option keypad:atm -option numpad:shift3 -option kpdl:semi -option ctrl:nocaps"
+    ----spawn $ "setxkbmap -layout us -variant dvp -option compose:menu -option ctrl:nocaps"
+    ----spawn $ "setxkbmap -layout us -variant dvp -option compose:menu -option ctrl:nocaps -option lv3:ralt_switch"
 
     -- Dvorak
-    --spawn $ "setxkbmap -layout us -variant dvp -option compose:menu -option ctrl:nocaps -option lv3:ralt_switch"
-    --spawn $ "setxkbmap -layout us -variant dvorak -option compose:menu -option ctrl:nocaps -option lv3:ralt_switch"
-    spawn $ "setxkbmap -layout us -variant dvorak -option compose:menu -option ctrl:nocaps -option lv3:ralt_switch -option keypad:pointerkeys"
+    ----spawn $ "setxkbmap -layout us -variant dvp -option compose:menu -option ctrl:nocaps -option lv3:ralt_switch"
+    ----spawn $ "setxkbmap -layout us -variant dvorak -option compose:menu -option ctrl:nocaps -option lv3:ralt_switch"
+    --spawn $ "setxkbmap -layout us -variant dvorak -option compose:menu -option ctrl:nocaps -option lv3:ralt_switch -option keypad:pointerkeys"
+
+    -- Now add toggle between us and russian.
+    --spawn $ "setxkbmap -layout 'dvorak,ru,ara' -option 'grp:shifts_toggle' -option compose:menu -option ctrl:nocaps -option lv3:ralt_switch -option keypad:pointerkeys"
+    spawn $ "setxkbmap -layout 'dvorak,ru' -option 'grp:shifts_toggle' -option compose:menu -option ctrl:nocaps -option lv3:ralt_switch -option keypad:pointerkeys"
 
     -- Qwerty
     --spawn $ "setxkbmap -layout us -variant qwerty -option compose:menu -option ctrl:nocaps -option lv3:ralt_switch"
@@ -189,7 +195,10 @@ startup = do
     -- Set resolution and gamma (restarting just xmonad can take care of issues)
     --spawn $ "xrandr -s 0"
     spawn $ "xrandr --output VGA-0 --mode 1024x768"
+    spawn $ "xrandr -o normal"
     spawn $ "xgamma -gamma 1.0"
+    -- 32 dpcm
+    spawn $ "xrandr --dpi 81.28"
 
     -- Start pulseaudio
     spawn $ "start-pulseaudio-x11"
@@ -293,6 +302,10 @@ layouts = windowNavigation . avoidStruts $ smartBorders (noBorders (tabbed shrin
 
 --- KEYS ---
 
+screenshotProgram :: String
+screenshotProgram =
+    "ruby -e \"require 'gtk2';tmp_filepath = '/tmp/tmp-scrot.png';system \\\"scrot #{tmp_filepath}\\\";clipboard=Gtk::Clipboard.get Gdk::Display.default, Gdk::Selection::CLIPBOARD;clipboard.image = Gdk::Pixbuf.new(tmp_filepath);clipboard.store\""
+
 keyBindings :: XConfig Layout -> M.Map (ButtonMask, KeySym) (X ())
 keyBindings xmonadConfig@(XConfig { modMask = modm
                             }) = M.fromList . (\ ~(x:y:xs) -> y:x:xs) $
@@ -378,6 +391,7 @@ keyBindings xmonadConfig@(XConfig { modMask = modm
     -- Screenshots --
     , ((modm, toKey $ xK_semicolon), spawn "scrot '%Y-%m-%d--%H:%M%S_$wx$h.png' -e 'mv $f ~/screenshots/'")
     , ((modm .|. shiftMask, toKey $ xK_semicolon), spawn "scrot -s '%Y-%m-%d--%H:%M%S_$wx$h.png' -e 'mv $f ~/screenshots/'")
+    , ((modm .|. controlMask, toKey $ xK_semicolon), spawn screenshotProgram)
 
 
     -- Misc --
@@ -390,7 +404,7 @@ keyBindings xmonadConfig@(XConfig { modMask = modm
     , ((modm, xK_r), refresh)  -- Mnemonic: refresh
     , ((modm .|. shiftMask, xK_Return), spawn $ terminal xmonadConfig ++ if "urxvt" `isInfixOf` (terminal xmonadConfig) then " -title IRC" else " --title IRC")  -- These terminals are moved to the IRC workspace
     , ((modm, xK_a), spawn $ terminal xmonadConfig)
-    , ((modm, toKey $ xK_p), spawn "xscreensaver-command -lock")
+    , ((modm, toKey $ xK_p), spawn "xset dpms force off; xscreensaver-command -lock")
     -- increase and decrease opacity
     , ((modm, toKey $ xK_d), spawn "transset-df -a --dec .1")
     , ((modm, toKey $ xK_f), spawn "transset-df -a --inc .1")
@@ -417,7 +431,7 @@ keyBindings xmonadConfig@(XConfig { modMask = modm
 
     where workspaceKeys, screenKeys :: [KeySym]
           --workspaceKeys = toKey <$> [xK_grave] ++ [xK_1 .. xK_9]
-          workspaceKeys = toKey <$> [xK_1 .. xK_9]
+          workspaceKeys = toKey <$> [xK_1 .. xK_9] ++ [xK_period]
           screenKeys    = toKey <$> [xK_y, xK_u, xK_i]
 
 --- KEY LAYOUTS ---
