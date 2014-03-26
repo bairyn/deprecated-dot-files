@@ -6,14 +6,15 @@ import Control.Arrow
 import Control.Category
 import Control.Lens
 import Control.Monad
-import Control.Proxy
-import Control.Proxy.Prelude
+--import Control.Proxy
+--import Control.Proxy.Prelude
 import Data.Char
 import Data.Either
 import Data.Function hiding (id, (.))
 import Data.List
 import Data.Maybe
 import Data.Monoid
+import Data.Numbers.Primes
 import Data.Ord
 import Data.Ratio
 import System.Cmd
@@ -38,5 +39,6 @@ import Text.Regex.PCRE
 --let interactP p = runProxy $ promptS >-> p >-> promptC
 --let mapLines f = interactP $ mapD f
 
-:l ~/.cabal/Util.hs
+:set -i/home/bairyn/.cabal
+:l Util
 :set -interactive-print=myPrint

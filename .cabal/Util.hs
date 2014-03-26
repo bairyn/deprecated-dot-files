@@ -1,7 +1,14 @@
 --{-# OPTIONS_GHC -interactive-print=myPrint #-}  -- This doesn't work; added
 --it to alias in .zshrc.
 {-# LANGUAGE Arrows #-}
-module Util where
+module Util
+    ( scramble
+    , scrambleIO
+    , shuffleWords
+    , myPrint
+
+    , module Util.Misc0
+    ) where
 
 import Prelude hiding (id, (.))
 import Control.Arrow
@@ -11,6 +18,8 @@ import System.Random
 -- http://stackoverflow.com/questions/5535512/how-to-hack-ghci-or-hugs-so-that-it-prints-unicode-chars-unescaped
 import System.IO
 import qualified Text.PrettyPrint.ANSI.Leijen as PP
+
+import Util.Misc0
 
 -- Very inefficiently scramble a list.
 scramble :: [a] -> StdGen -> ([a], StdGen)
