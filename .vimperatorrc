@@ -104,3 +104,5 @@ noremap <F2> :emenu View.Sidebar.Bookmarks<Enter>
 ":set guioptions=rb
 
 :set noautocomplete
+
+nnoremap . :noh<Return>
