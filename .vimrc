@@ -27,12 +27,15 @@ set wmh=0
 " do not break lines when line length increases
 set textwidth=0
 " user 4 spaces to represent a tab
-set tabstop=4
-set softtabstop=4
+"set tabstop=4
+set tabstop=2
+"set softtabstop=4
+set softtabstop=2
 " number of space to use for auto indent
 " you can use >> or << keys to indent current line or selection
 " in normal mode.
-set shiftwidth=4
+"set shiftwidth=4
+set shiftwidth=2
 " Copy indent from current line when starting a new line.
 set autoindent
 " makes backspace key more powerful.
