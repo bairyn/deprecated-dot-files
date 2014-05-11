@@ -433,7 +433,8 @@ endfunction
 if !exists("autocommands_fileTypes_loaded")
     let autocommands_fileTypes_loaded = 1
     " for Haskell and python source files, set expand on
-    au FileType python,haskell set expandtab ts=4 sw=4 nocindent nosmartindent autoindent
+    "au FileType python,haskell set expandtab ts=4 sw=4 nocindent nosmartindent autoindent
+    au FileType python,haskell set expandtab sts=2 ts=2 sw=2 nocindent nosmartindent autoindent
     au FileType asm call Asm()
 endif
 
