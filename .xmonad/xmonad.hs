@@ -43,7 +43,7 @@ main = xmonad =<< (dzenBar . withUrgencyHookC dzenUrgencyHook urgency $ xmonadCo
               --, terminal           = "gnome-terminal"
               , terminal           = case termConf of 
                                        GnomeTerminal -> "gnome-terminal"
-                                       XFCE4Terminal -> "terminal"
+                                       XFCE4Terminal -> "xfce4-terminal"
                                        Rxvtc         -> "urxvtc"
                                        Rxvt          -> "urxvt"
               , layoutHook         = layouts
@@ -116,7 +116,7 @@ main = xmonad =<< (dzenBar . withUrgencyHookC dzenUrgencyHook urgency $ xmonadCo
 
 data TermConf =
     GnomeTerminal  -- ^ Gnome-terminal.
-  | XFCE4Terminal  -- ^ xfce4-terminal.  (On Archlinux, from xfce4-terminal package; command is annoyingly "terminal".)
+  | XFCE4Terminal  -- ^ xfce4-terminal.  (On Archlinux, from xfce4-terminal package; command is now "xfce4-terminal" =) )
   | Rxvt           -- ^ urxvtc, rxvt-unicode, etc.
   | Rxvtc          -- ^ use daemon and client, urxvtc.
 
