@@ -12,6 +12,7 @@ import Control.Monad
 --import Control.Proxy.Prelude
 import Data.Char
 import Data.Either
+import Data.Fixed
 import Data.Function hiding (id, (.))
 import Data.List
 import Data.Maybe
