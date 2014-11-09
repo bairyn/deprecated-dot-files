@@ -22,4 +22,5 @@ ScrollingLines=10000
 FontName=Monospace 10
 ShortcutsNoMenukey=TRUE
 ShortcutsNoMnemonics=TRUE
+ColorCursor=#ffffffffffff
 
