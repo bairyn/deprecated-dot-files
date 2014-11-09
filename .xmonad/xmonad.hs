@@ -1,3 +1,5 @@
+{-# LANGUAGE DeriveDataTypeable, GADTs, TemplateHaskell #-}
+
 -- | XMonad configuration.
 --
 -- https://github.com/bairyn/dot-files
@@ -7,6 +9,7 @@ module Main where
 
 import Control.Applicative
 import Control.Monad
+import Data.Data
 import Data.List
 import qualified Data.Map as M
 import Data.Monoid
@@ -119,11 +122,12 @@ data TermConf =
   | XFCE4Terminal  -- ^ xfce4-terminal.  (On Archlinux, from xfce4-terminal package; command is now "xfce4-terminal" =) )
   | Rxvt           -- ^ urxvtc, rxvt-unicode, etc.
   | Rxvtc          -- ^ use daemon and client, urxvtc.
+  deriving (Eq, Ord, Show, Read, Enum, Typeable, Data)
 
 -- | Your xmonad configuration uses this setting to determine which terminal to
 -- use.
 termConf :: TermConf
-termConf = GnomeTerminal
+termConf = XFCE4Terminal
 
 compositingManagerStart :: X ()
 compositingManagerStart = do
