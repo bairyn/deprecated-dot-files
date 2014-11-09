@@ -1,3 +1,10 @@
+-- | XMonad configuration.
+--
+-- https://github.com/bairyn/dot-files
+
+-- TODO: this is rather messy; could use some cleaning up.
+module Main where
+
 import Control.Applicative
 import Control.Monad
 import Data.List
@@ -33,7 +40,12 @@ main = xmonad =<< (dzenBar . withUrgencyHookC dzenUrgencyHook urgency $ xmonadCo
               -- , terminal           = "terminal"
               -- , terminal           = "gnome-terminal"
               --, terminal           = "urxvt"
-              , terminal           = "gnome-terminal"
+              --, terminal           = "gnome-terminal"
+              , terminal           = case termConf of 
+                                       GnomeTerminal -> "gnome-terminal"
+                                       XFCE4Terminal -> "terminal"
+                                       Rxvtc         -> "urxvtc"
+                                       Rxvt          -> "urxvt"
               , layoutHook         = layouts
               , manageHook         = customManageHook
               , handleEventHook    = event
@@ -101,6 +113,17 @@ main = xmonad =<< (dzenBar . withUrgencyHookC dzenUrgencyHook urgency $ xmonadCo
                     ]
               }
           -}
+
+data TermConf =
+    GnomeTerminal  -- ^ Gnome-terminal.
+  | XFCE4Terminal  -- ^ xfce4-terminal.  (On Archlinux, from xfce4-terminal package; command is annoyingly "terminal".)
+  | Rxvt           -- ^ urxvtc, rxvt-unicode, etc.
+  | Rxvtc          -- ^ use daemon and client, urxvtc.
+
+-- | Your xmonad configuration uses this setting to determine which terminal to
+-- use.
+termConf :: TermConf
+termConf = GnomeTerminal
 
 compositingManagerStart :: X ()
 compositingManagerStart = do
@@ -204,8 +227,10 @@ startup = do
     -- Start pulseaudio
     spawn $ "start-pulseaudio-x11"
 
-    -- Start urxvtd daemon; comment when not using.
-    --spawn $ "urxvtd -q -f -o"
+    -- Start urxvtd daemon if using Rxvt terminal with daemon / client setup.
+    case termConf of
+      Rxvt -> spawn $ "urxvtd -q -f -o"
+      _    -> return ()
 
     -- Start a terminal
     --spawn =<< asks (terminal . config)
@@ -403,7 +428,8 @@ keyBindings xmonadConfig@(XConfig { modMask = modm
     --, ((modm, xK_b), spawn $ "pkill -USR1 dzen2")  -- toggle status bar
     , ((modm, xK_b), toggleStatusBar)  -- toggle status bar
     , ((modm, xK_r), refresh)  -- Mnemonic: refresh
-    , ((modm .|. shiftMask, xK_Return), spawn $ terminal xmonadConfig ++ if "urxvt" `isInfixOf` (terminal xmonadConfig) then " -title IRC" else " --title IRC")  -- These terminals are moved to the IRC workspace
+    --, ((modm .|. shiftMask, xK_Return), spawn $ terminal xmonadConfig ++ if "urxvt" `isInfixOf` (terminal xmonadConfig) then " -title IRC" else " --title IRC")  -- These terminals are moved to the IRC workspace
+    , ((modm .|. shiftMask, xK_Return), spawn $ terminal xmonadConfig ++ if "rxvt" `isInfixOf` (terminal xmonadConfig) then " -title IRC" else " --title IRC")  -- These terminals are moved to the IRC workspace
     , ((modm, xK_a), spawn $ terminal xmonadConfig)
     , ((modm, toKey $ xK_p), spawn "xset dpms force off; xscreensaver-command -lock")
     -- increase and decrease opacity
