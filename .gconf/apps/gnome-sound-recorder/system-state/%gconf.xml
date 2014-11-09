@@ -1,0 +1,6 @@
+<?xml version="1.0"?>
+<gconf>
+	<entry name="save-file-directory" mtime="1371489465" type="string">
+		<stringvalue>/home/bairyn/audio/record/2013-06-17-random-voice</stringvalue>
+	</entry>
+</gconf>
