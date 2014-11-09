@@ -199,11 +199,12 @@ startup = do
     spawn $ "xgamma -gamma 1.0"
     -- 32 dpcm
     spawn $ "xrandr --dpi 81.28"
+    spawn $ "xrandr -s 0"
 
     -- Start pulseaudio
     spawn $ "start-pulseaudio-x11"
 
-    -- Start urxvtd daemon
+    -- Start urxvtd daemon; comment when not using.
     --spawn $ "urxvtd -q -f -o"
 
     -- Start a terminal
