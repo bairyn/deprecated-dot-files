@@ -23,4 +23,5 @@ FontName=Monospace 10
 ShortcutsNoMenukey=TRUE
 ShortcutsNoMnemonics=TRUE
 ColorCursor=#ffffffffffff
+ColorPalette=#000000000000;#cdcd00000000;#0000cdcd0000;#cdcdcdcd0000;#00000000cdcd;#cdcd0000cdcd;#0000cdcdcdcd;#fafaebebd7d7;#404040404040;#ffff00000000;#0000ffff0000;#ffffffff0000;#00000000ffff;#ffff0000ffff;#0000ffffffff;#ffffffffffff
 
