@@ -16,6 +16,7 @@ import Data.Monoid
 import qualified Data.Set as S
 import System.Exit
 import System.IO
+import Text.Printf
 
 import XMonad
 import XMonad.Hooks.DynamicLog
@@ -138,6 +139,45 @@ data TermConf =
 -- use.
 termConf :: TermConf
 termConf = GnomeTerminal
+
+-- | Configure your terminal emulator by the main key binding to automatically
+-- start in a new tmux session.
+--
+-- Warning: if enabled, may prevent shell from starting.  Can disable from the
+-- TTY or by using an alternate key-binding to start a terminal emulator that
+-- ignores this option, e.g. meta-enter for an IRC terminal.
+--
+-- Requires "require-tmux" in PATH.  My version, which I've put in both
+-- ~/bin/require-tmux and a shell function named require-tmux, looks something like this:
+--
+-- @
+-- #!/bin/bash
+-- # Ensure you're in a tmux session.  If TMUX isn't set and isn't
+-- # blank, and if TERM isn't/doesn't contain "screen", run "exec tmux $*" (by
+-- # default, with no args, "tmux" is "tmux new").
+-- if [[ ! $TERM =~ screen ]]; then
+-- # TODO: lookup bash AND conditional.
+-- if [[ "$TMUX" = "" ]]; then
+--     exec tmux $*
+-- fi
+-- fi
+-- @
+--
+-- and
+--
+-- @
+-- # require-tmux ensures you're in a tmux session.  If TMUX isn't set and isn't
+-- # blank, and if TERM isn't/doesn't contain "screen", run "exec tmux $*" (by
+-- # default, with no args, "tmux" is "tmux new").
+-- function require-tmux()
+-- {
+--   source ~/bin/require-tmux $*
+-- }
+-- @
+--
+-- Solution from http://stackoverflow.com/questions/11068965/how-can-i-make-tmux-be-active-whenever-i-start-a-new-shell-session .
+autoRequireTmux :: Bool
+autoRequireTmux = True
 
 compositingManagerStart :: X ()
 compositingManagerStart = do
@@ -444,7 +484,8 @@ keyBindings xmonadConfig@(XConfig { modMask = modm
     , ((modm, xK_r), refresh)  -- Mnemonic: refresh
     --, ((modm .|. shiftMask, xK_Return), spawn $ terminal xmonadConfig ++ if "urxvt" `isInfixOf` (terminal xmonadConfig) then " -title IRC" else " --title IRC")  -- These terminals are moved to the IRC workspace
     , ((modm .|. shiftMask, xK_Return), spawn $ terminal xmonadConfig ++ if "rxvt" `isInfixOf` (terminal xmonadConfig) then " -title IRC" else " --title IRC")  -- These terminals are moved to the IRC workspace
-    , ((modm, xK_a), spawn $ terminal xmonadConfig)
+    --, ((modm, xK_a), spawn $ terminal xmonadConfig)
+    , ((modm, xK_a), if autoRequireTmux then spawn $ printf "%s -e require-tmux" (terminal xmonadConfig) else spawn $ terminal xmonadConfig)
     , ((modm, toKey $ xK_p), spawn "xset dpms force off; xscreensaver-command -lock")
     -- increase and decrease opacity
     , ((modm, toKey $ xK_d), spawn "transset-df -a --dec .1")
