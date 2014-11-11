@@ -119,7 +119,17 @@ main = xmonad =<< (dzenBar . withUrgencyHookC dzenUrgencyHook urgency $ xmonadCo
 
 data TermConf =
     GnomeTerminal  -- ^ Gnome-terminal.
+                   --
+                   --   Complaints:
+                   --     * Uses single process for all terminals with no
+                   --       option to disable.
   | XFCE4Terminal  -- ^ xfce4-terminal.  (On Archlinux, from xfce4-terminal package; command is now "xfce4-terminal" =) )
+                   --
+                   --   Complaints:
+                   --     * Character under cursor, when the color is the same,
+                   --       is invisible!
+                   --     * Uses single process for all terminals with no
+                   --       option to disable.
   | Rxvt           -- ^ urxvtc, rxvt-unicode, etc.
   | Rxvtc          -- ^ use daemon and client, urxvtc.
   deriving (Eq, Ord, Show, Read, Enum, Typeable, Data)
@@ -127,7 +137,7 @@ data TermConf =
 -- | Your xmonad configuration uses this setting to determine which terminal to
 -- use.
 termConf :: TermConf
-termConf = XFCE4Terminal
+termConf = GnomeTerminal
 
 compositingManagerStart :: X ()
 compositingManagerStart = do
