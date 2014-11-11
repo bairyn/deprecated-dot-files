@@ -14,3 +14,5 @@ PATH=~/bin:~/.cabal/bin:/usr/local/bin:/opt/java/bin:${PATH} && export PATH
 PS1='[\u@\h \W]\$ '
 export EDITOR=vim
 export VISUAL=vim
+
+PATH=$PATH:$HOME/.rvm/bin # Add RVM to PATH for scripting
