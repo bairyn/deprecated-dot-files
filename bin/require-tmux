@@ -1,0 +1,10 @@
+#!/bin/bash
+# Ensure you're in a tmux session.  If TMUX isn't set and isn't
+# blank, and if TERM isn't/doesn't contain "screen", run "exec tmux $*" (by
+# default, with no args, "tmux" is "tmux new").
+if [[ ! $TERM =~ screen ]]; then
+# TODO: lookup bash AND conditional.
+if [[ "$TMUX" = "" ]]; then
+    exec tmux $*
+fi
+fi

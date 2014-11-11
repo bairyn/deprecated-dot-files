@@ -1,3 +1,6 @@
+export MYKEYID=XXXXXXXX
+export EMAIL=email.address@example.com
+
 # http://stackoverflow.com/questions/11068965/how-can-i-make-tmux-be-active-whenever-i-start-a-new-shell-session
 # (dot-files note: xmonad can be and currently is configured to start a tmux
 # session using the same solution as the above SO post, but it plays well with
@@ -19,12 +22,7 @@
 #
 # UNCOMMENTING THIS MAY, IMMEDIATELY OR IN THE FUTURE, PREVENT YOU FROM
 # STARTING YOUR zsh SHELL!
-#if [[ ! $TERM =~ screen ]]; then
-## TODO: lookup bash AND conditional.
-#if [[ "$TMUX" = "" ]]; then
-    #exec tmux new
-#fi
-#fi
-
-export MYKEYID=XXXXXXXX
-export EMAIL=email.address@example.com
+#
+# Note that this exec statement must appear at the end of this file; else
+# everything after it will be ignored, due to the "exec" in ~/bin/require-tmux.
+#source ~/bin/require-tmux
