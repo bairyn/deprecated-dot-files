@@ -189,6 +189,13 @@ autoRequireTmux = True
 autoRequireTmuxCommand :: String
 autoRequireTmuxCommand = "require-tmux -2u"
 
+-- | The third way to start a Terminal, intended to be used as a fallback, e.g.
+-- when 'autoRequireTmux' breaks and prevents new terminals from spawning,
+-- allowing one to fix these issues or at least disable 'autoRequireTmux',
+-- whether for a tmux protocol mismatch, package removal, or other reason.
+fallbackTerminalCommand :: String
+fallbackTerminalCommand = "xterm /bin/bash"
+
 compositingManagerStart :: X ()
 compositingManagerStart = do
     spawn $ "xcompmgr -c"  -- This will fail if the process is already running, ultimately not doing anything
@@ -493,7 +500,9 @@ keyBindings xmonadConfig@(XConfig { modMask = modm
     , ((modm, xK_b), toggleStatusBar)  -- toggle status bar
     , ((modm, xK_r), refresh)  -- Mnemonic: refresh
     --, ((modm .|. shiftMask, xK_Return), spawn $ terminal xmonadConfig ++ if "urxvt" `isInfixOf` (terminal xmonadConfig) then " -title IRC" else " --title IRC")  -- These terminals are moved to the IRC workspace
-    , ((modm .|. shiftMask, xK_Return), spawn $ terminal xmonadConfig ++ if "rxvt" `isInfixOf` (terminal xmonadConfig) then " -title IRC" else " --title IRC")  -- These terminals are moved to the IRC workspace
+    --, ((modm .|. shiftMask, xK_Return), spawn $ terminal xmonadConfig ++ if "rxvt" `isInfixOf` (terminal xmonadConfig) then " -title IRC" else " --title IRC")  -- These terminals are moved to the IRC workspace
+    , ((modm .|. shiftMask, xK_Return), spawn $ terminal xmonadConfig)  -- Start a fallback terminal, ignoring extra commands and configuration such as automatically starting tmux.
+    , ((modm .|. shiftMask .|. controlMask, xK_Return), spawn $ fallbackTerminalCommand)  -- Start the last fallback terminal command.
     --, ((modm, xK_a), spawn $ terminal xmonadConfig)
     , ((modm, xK_a), if autoRequireTmux then spawn $ printf "%s -e \"%s\"" (terminal xmonadConfig) (autoRequireTmuxCommand) else spawn $ terminal xmonadConfig)
     , ((modm, toKey $ xK_p), spawn "xset dpms force off; xscreensaver-command -lock")
