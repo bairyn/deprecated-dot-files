@@ -1,5 +1,5 @@
 export MYKEYID=XXXXXXXX
-export EMAIL=email.address@example.com
+export EMAIL='email.address@example.com'
 
 # http://stackoverflow.com/questions/11068965/how-can-i-make-tmux-be-active-whenever-i-start-a-new-shell-session
 # (dot-files note: xmonad can be and currently is configured to start a tmux
