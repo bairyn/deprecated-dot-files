@@ -179,6 +179,16 @@ termConf = GnomeTerminal
 autoRequireTmux :: Bool
 autoRequireTmux = True
 
+-- | The command to execute to automatically require tmux when a terminal is
+-- started, when configured by 'autoRequireTmux'.
+--
+-- Currently set to pass -2 to force 256 colors (otherwise vim colors can look
+-- different), and -u to tell tmux utf-8 is supported by the terminal.
+--
+-- Unless the terminal binding that uses 'autoRequireTmuxCommand' with printf is updated, this must be a 'String'.
+autoRequireTmuxCommand :: String
+autoRequireTmuxCommand = "require-tmux -2u"
+
 compositingManagerStart :: X ()
 compositingManagerStart = do
     spawn $ "xcompmgr -c"  -- This will fail if the process is already running, ultimately not doing anything
@@ -485,7 +495,7 @@ keyBindings xmonadConfig@(XConfig { modMask = modm
     --, ((modm .|. shiftMask, xK_Return), spawn $ terminal xmonadConfig ++ if "urxvt" `isInfixOf` (terminal xmonadConfig) then " -title IRC" else " --title IRC")  -- These terminals are moved to the IRC workspace
     , ((modm .|. shiftMask, xK_Return), spawn $ terminal xmonadConfig ++ if "rxvt" `isInfixOf` (terminal xmonadConfig) then " -title IRC" else " --title IRC")  -- These terminals are moved to the IRC workspace
     --, ((modm, xK_a), spawn $ terminal xmonadConfig)
-    , ((modm, xK_a), if autoRequireTmux then spawn $ printf "%s -e require-tmux" (terminal xmonadConfig) else spawn $ terminal xmonadConfig)
+    , ((modm, xK_a), if autoRequireTmux then spawn $ printf "%s -e \"%s\"" (terminal xmonadConfig) (autoRequireTmuxCommand) else spawn $ terminal xmonadConfig)
     , ((modm, toKey $ xK_p), spawn "xset dpms force off; xscreensaver-command -lock")
     -- increase and decrease opacity
     , ((modm, toKey $ xK_d), spawn "transset-df -a --dec .1")
