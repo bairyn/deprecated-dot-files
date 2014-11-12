@@ -8,6 +8,7 @@ if [[ "$TMUX" = "" ]]; then
 # Allow TMUX to be automatically unset if TMUX_ is set to make nesting more
 # convenient.
 if [[ "$TMUX_" = "" ]]; then
+    export TERM=screen-256color
     exec tmux $*
 fi
 fi
