@@ -569,3 +569,5 @@ nnoremap <ESC>< <C-w><
 
 " See line 74
 "imap <Nul> <Esc><Esc>n
+
+set et softtabstop=2 tabstop=2 shiftwidth=2
