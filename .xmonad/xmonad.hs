@@ -278,7 +278,9 @@ startup = do
 
     -- Now add toggle between us and russian.
     --spawn $ "setxkbmap -layout 'dvorak,ru,ara' -option 'grp:shifts_toggle' -option compose:menu -option ctrl:nocaps -option lv3:ralt_switch -option keypad:pointerkeys"
-    spawn $ "setxkbmap -layout 'dvorak,ru' -option 'grp:shifts_toggle' -option compose:menu -option ctrl:nocaps -option lv3:ralt_switch -option keypad:pointerkeys"
+    --spawn $ "setxkbmap -layout 'dvorak,ru' -option 'grp:shifts_toggle' -option compose:menu -option ctrl:nocaps -option lv3:ralt_switch -option keypad:pointerkeys"
+    -- Run "setxkbmap -option" to reset previous options.
+    spawn $ "setxkbmap -option -layout 'dvorak,ru' -option 'grp:shifts_toggle' -option compose:menu -option ctrl:nocaps -option lv3:ralt_switch -option keypad:pointerkeys"
 
     -- Qwerty
     --spawn $ "setxkbmap -layout us -variant qwerty -option compose:menu -option ctrl:nocaps -option lv3:ralt_switch"
