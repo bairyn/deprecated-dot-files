@@ -290,11 +290,14 @@ startup = do
 
     -- Set resolution and gamma (restarting just xmonad can take care of issues)
     --spawn $ "xrandr -s 0"
-    spawn $ "xrandr --output VGA-0 --mode 1024x768"
+    --spawn $ "xrandr --output VGA-0 --mode 1024x768"
+    spawn $ "xrandr --auto"
+    spawn $ "xrandr --output LVDS1 --auto"
     spawn $ "xrandr -o normal"
     spawn $ "xgamma -gamma 1.0"
     -- 32 dpcm
-    spawn $ "xrandr --dpi 81.28"
+    --spawn $ "xrandr --dpi 81.28"
+    spawn $ "xrandr --auto"
     spawn $ "xrandr -s 0"
 
     -- Start pulseaudio
