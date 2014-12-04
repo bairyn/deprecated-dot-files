@@ -297,6 +297,7 @@ startup = do
     spawn $ "xgamma -gamma 1.0"
     -- 32 dpcm
     --spawn $ "xrandr --dpi 81.28"
+    --spawn $ "xrandr --dpi 96"
     spawn $ "xrandr --auto"
     spawn $ "xrandr -s 0"
 
