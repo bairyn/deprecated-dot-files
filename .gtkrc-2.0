@@ -3,6 +3,6 @@
 gtk-theme-name = "Xfce"
 style "user-font"
 {
-	font_name="Utopia 8"
+	font_name="Utopia 10"
 }
 widget_class "*" style "user-font"

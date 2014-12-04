@@ -8,7 +8,7 @@
 	<entry name="scrollback_lines" mtime="1368813745" type="int" value="50000"/>
 	<entry name="use_theme_colors" mtime="1368813745" type="bool" value="false"/>
 	<entry name="font" mtime="1368813745" type="string">
-		<stringvalue>Monospace 8</stringvalue>
+		<stringvalue>Monospace 10</stringvalue>
 	</entry>
 	<entry name="use_system_font" mtime="1368813745" type="bool" value="false"/>
 	<entry name="palette" mtime="1368813745" type="string">
