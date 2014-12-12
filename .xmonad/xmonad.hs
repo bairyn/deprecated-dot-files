@@ -298,6 +298,7 @@ startup = do
     -- 32 dpcm
     --spawn $ "xrandr --dpi 81.28"
     --spawn $ "xrandr --dpi 96"
+    spawn $ "xrandr --dpi 81.28"
     spawn $ "xrandr --auto"
     spawn $ "xrandr -s 0"
 
