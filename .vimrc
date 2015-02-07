@@ -310,9 +310,13 @@ set mousemodel=
 " cause a delay in vim.
 "set visualbell
 
-set cindent
-set nosmartindent
-set noautoindent
+""set cindent
+"set nosmartindent
+"set noautoindent
+set nocident
+set autoindent
+set smartindent
+filetype indent on
 
 " Read
 nnoremap <F3> :r ~/.vim/write_tmp<Esc>
@@ -533,8 +537,8 @@ endif
 
 au BufWritePost *.hs silent !fast-tags -o tags % &
 "Problems with indentation / comments?  http://stackoverflow.com/questions/2360249/vim-automatically-removes-indentation-on-python-comments 
-set nosmartindent
-set cindent
+"set nosmartindent
+"set cindent
 
 function! NumberToggle()
   if(&relativenumber == 1)
@@ -552,8 +556,8 @@ set tw=79
 
 " # indentation
 :inoremap # X<BS>#
-set cinkeys-=0#
-set indentkeys-=0#
+"set cinkeys-=0#
+"set indentkeys-=0#
 
 nnoremap <ESC>h <C-w>j
 nnoremap <ESC>t <C-w>k
