@@ -313,7 +313,7 @@ set mousemodel=
 ""set cindent
 "set nosmartindent
 "set noautoindent
-set nocident
+set nocindent
 set autoindent
 set smartindent
 filetype indent on
