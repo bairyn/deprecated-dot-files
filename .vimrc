@@ -60,7 +60,9 @@ set tw=79
 "" If cindent is on, smartindent is ignored.
 set nocindent
 "" Normally, if smartindent is enabled, then autoindent should also be enabled.
-set smartindent autoindent
+"set smartindent autoindent
+" Disable smartindent, so that "#" does not remove all indentation.
+set nosmartindent autoindent
 
 "" TODO: document.
 set formatoptions=croqtl
@@ -80,7 +82,7 @@ autocmd BufRead,BufNewFile *.yaml setlocal formatoptions=croqtl et ts=2 sts=2 sw
 
 " Tabs, windows and navigation. "{{{
 " ----------------------------------------------------------------
-" M-j and M-k navigates buffers.
+" M-j and M-k navigates tabs.
 nnoremap <M-j> :bn!<CR>
 nnoremap <M-k> :bp!<CR>
 nnoremap <Esc>j :bn!<CR>
