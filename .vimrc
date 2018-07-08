@@ -82,7 +82,7 @@ autocmd BufRead,BufNewFile *.yaml setlocal formatoptions=croqtl et ts=2 sts=2 sw
 
 " Tabs, windows and navigation. "{{{
 " ----------------------------------------------------------------
-" M-j and M-k navigates tabs.
+" M-j and M-k navigates buffers.
 nnoremap <M-j> :bn!<CR>
 nnoremap <M-k> :bp!<CR>
 nnoremap <Esc>j :bn!<CR>
