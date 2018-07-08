@@ -86,6 +86,8 @@ class bairyn {
 		package { 'anki': ensure => installed, }
 		package { 'keepassx': ensure => installed, }
 		package { 'feh': ensure => installed, }
+		package { 'evince': ensure => installed, }
+		package { 'okular': ensure => installed, }
 
 		case $::operatingsystem {
 			'fedora': {
