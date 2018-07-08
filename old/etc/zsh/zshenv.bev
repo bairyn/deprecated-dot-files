@@ -1,0 +1,2 @@
+set -o no_unset -o no_clobber -o err_return -o pipe_fail
+

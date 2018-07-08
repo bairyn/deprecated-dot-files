@@ -1,0 +1,289 @@
+if (( ${+_LOADED_etc_zshrc_bev} )); then
+  return
+fi
+
+set -o no_unset -o no_clobber -o err_return -o pipe_fail
+
+declare -gar _LOADED_etc_zshrc_bev
+
+function dpkg-list {
+  local grep_options='-E --text --color=auto -i'
+  grep_options+="$(
+    read -t0 -eru0 || :
+  )"
+  grep_options="$(
+    read -t0 -eru0 || printf '%s' "$==grep_options"
+  )"
+
+  local cmd
+  cmd=${==:-dpkg-query -Wf \'\${Package}\\n\'${argv:+" | grep $==grep_options "${^=argv}}}
+
+  local precmd
+  if { read -t0 -ru0 precmd ;} cmd="$==precmd ${(q-)==cmd}"
+  eval "$==cmd"
+}
+
+function dpkg-list_help {
+  printf '%2$s%1$s\n=========\n' 'Overview.' ''
+
+  printf $' * %s %s\\n'\
+    "Synopsis: " "${(q-)$0} searches installed packages."
+    "Aliases:  " "This script defines no aliases for ${(q-)$0}."
+
+  printf '%2$s%1$s\n=========\n' 'Examples.' $'\n\n~~~\n\n'
+
+  printf $' * %s dpkg-query-list%s\\n'\
+    "List all:        " $''\
+    "Contains ghc:    " $' ghc'\
+    "add grep flags:  " $' <<< \'--color=never'\' ghc\
+    "set grep flags:  " $' <<<.<<< \'-E --only-matching -i\' ghc'\
+    "Simple match:    " $' ^wesnoth$'\
+    "wesnoth && data: " $' wesnoth data'\
+    "Hilight 'data':  " $' wesnoth \'(data)?\''\
+    "Hilight 'data':  " $' wesnoth \'(|data)\''\
+    "Piping output:   " $' ^wesnoth$ | tee'\
+    "no escape codes: " $' ^wesnoth$ | remove-escape-codes'\
+    "or:              " $' (ghc|cabal-install|wesnoth)'\
+    "what would run:  " $' <<< \'--this-flag\' <<< \'--or-that\' <<< \'echo -E ghc cabal-install\' wesnoth'\
+  ;
+}
+
+
+function remove-escape-codes {
+  (( $# <= 0 )) || { echo 'too many args'; return 1 ;}
+
+  # Thanks <http://serverfault.com/a/71289/278114>!
+  sed -r "s/\x1B\[([0-9]{1,2}(;[0-9]{1,2})?)?[m|K]//g"
+}
+
+function {
+  local old_prompt="${PROMPT-}"
+
+  function bev-prompt-set-pre-update {
+    local replaced_prompt="${PROMPT-}"
+    export PROMPT="${old_prompt}"
+    old_prompt="${replaced_prompt}"
+  }
+}
+
+##source /etc/zsh/newuser.zshrc.recommended
+##prompt pws
+## Only load completion part of the file.
+#source =(sed -nre '/^autoload.*compinit/,$p' '/etc/zsh/newuser.zshrc.recommended')
+
+
+# TODO: truncation!
+declare -gx NO_BEV_PROMPT="${NO_BEV_PROMPT-"$((false))"}"
+function bev-prompt {
+  set -o prompt_subst
+
+  # <!-- ~~~~~~~~  -->
+  # Common components.
+  # ==================
+  # * `%{…%}`: raw escape code.
+  local "$(echo reset_escape_codes       )="$'%{\e[00m%}'
+  local "$(echo _fmt_conditional         )="$'%%(%s.%s.%s)'
+
+  local "$(echo _heart                   )="$'❤'
+  local "$(echo _heartl                  )="$'%{\e[31m%}'
+  local "$(echo _heartr                  )="$'%{\e[39m%}'
+  local "$(echo heart                    )=${_heartl}${_heart}${_heartr}"
+  local "$(echo _bevelopment_admin_heartl)="$'%{\e[41m%}'
+  local "$(echo _bevelopment_admin_heartr)="$'%{\e[49m%}'
+  local "$(echo _benevolent_admin_heart  )="$'💓'  # ❦ # ❣ # 💕  # 💓
+  local "$(echo benevolent_admin_heart   )=${_bevelopment_admin_heartl}%B${_benevolent_admin_heart}%b${_bevelopment_admin_heartr}"
+  local "$(echo _preheart                )=${heart}"
+  local "$(echo _preheartl               )="$'%{\e[35m%}'
+  local "$(echo _preheartr               )="$'%{\e[39m%}'
+  local "$(echo preheart                 )=${_preheartl}${_heart}${_preheartr}"
+  local "$(echo prebenevolent_admin_heart)=${_heart}"
+
+  local "$(echo italics_begin            )="$'%{\e[03m%}'
+  local "$(echo italics_end              )="$'%{\e[23m%}'
+
+  local "$(echo cursor_save              )="$'%{\e[s%}'
+  local "$(echo cursor_restore           )="$'%{\e[u%}'
+
+  ## -Bold- if regular user.  Red if root.
+  ##local "$(echo cli_looks)="$'%(!.%{\e[31;07;04m%}.%{\e[01m%})'
+  #local "$(echo cli_looks)="$'%(!.%{\e[31;07;04m%}.%{\e[00m%})'
+  #local "$(echo cli_looks)="$'%(!.%{\e[31;07;04m%}                        %{\e[24D%}.%{\e[00m%})'
+  ## Underline the first character.
+  #local "$(echo cli      )=" #$'%{\e[s\e[04m%}…%{\e[6D\e[u%}'
+
+  # ~~~~~~~~~~~~
+  # Left prompt.
+  # ============
+
+  #local "$(echo in_cli   )="$'%(!.%{\e[31;07;04m                        \e[24D%}.%{\e[00m%})'
+  local "$(echo in_cli   )=" #$'%(!.%{\e[31;07;04m                        \e[24D%}.%{\e[00m%})'
+
+  #local "$(echo privilege_indicator)="$'%(!.#.$(printf \\\'%.0s\\\\n\\\' $(seq '"${SHLVL:-0}"$') | sed -re"\\$!s/.*\\\\n/'"${preheart}"'/" -e"\\$s/.*\\\\n/${heart}/")${heart})'
+  #local "$(echo privilege_indicator)="$'%(!.#.'"${heart}"')'
+  local "$(echo privilege_indicator)=$(repeat $[SHLVL-1] printf "$_fmt_conditional" '!' "$prebenevolent_admin_heart" "$preheart"; printf "$_fmt_conditional" '!' "$benevolent_admin_heart" "$heart")"
+  # * `%B`: bold mode.
+  # * date-time escapes:
+  #   * `%D`: strftime(3) formatted string:
+  #     * `%H:` hour   (24)
+  #     * `%I:` hour   (12)
+  #     * `%P:` am/pm
+  #     * `%M:` minute
+  #     * `%S:` seconds
+
+  local "$(echo time     )="$'%B%D{%I:%M%P}%b:%D{%S} '
+
+  local "$(echo user     )="$'%n'
+
+  # * `%!`: current history number.
+  local "$(echo h_brief  )="$'%{\e[2m\e[3m%}$(tail -c 4 <<< "$[HISTCMD]" | sed -r \'s/.(..)/…\\1/\')%{\e[23m\e[22m%} '
+
+  # * `%U`: underline.
+  # * `%M`: hostname.
+  #local "$(echo host     )="$'@%U%{\e['"$(hostnamectl --static status | sha512sum | od -v -A n -l | tr -d $' \t\n' | sed -r "s/\\\`.*\'/& % 8 + 30/;q" | bc)"$'m%}%M%{\e[39m%}%u'
+  local "$(echo host     )="$'@%U%{\e['"$(hostnamectl --static status | od -v -A n -l | tr -d $' \t\n' | sed -r "s/\\\`.*\'/& % 8 + 30/;q" | bc)"$'m%}%M%{\e[39m%}%u'
+
+  local "$(echo pwd_all  )="$':%~'
+  local "$(echo pwd      )="$'%(6~.%-2d/…/%2d.%~)'
+
+  # * `%j`: number of jobs.
+  local "$(echo jobs     )="$'%(1j.%B%{\e[03m%}(%j)%{\e[23m%}%b.)'
+
+  local "$(echo spacing  )="$' '
+
+  export LPROMPT="${reset_escape_codes}${time}${h_brief}${user}${host}${pwd}${jobs}${privilege_indicator}${spacing}${reset_escape_codes}${in_cli}"
+
+  # ~~~~~~~~~~~~~
+  # Right prompt.
+  # =============
+
+  local "$(echo history_number     )="$'%!'
+
+  # * date-time escapes:
+  #   * `%D`: strftime(3) formatted string:
+  #     * `%H:` hour   (24)
+  #     * `%I:` hour   (12)
+  #     * `%P:` am/pm
+  #     * `%Z:` time zone name or abbreviation
+  #     * `%z:` numeric time zone: [+-]hhmm
+  local "$(echo side_time)="$'%D{%H:%M}@%Z (%z)'
+
+  local "$(echo exit_code)="$'%(0?..%{\e[0;1;31m%}\\$?:%?%{\e[0;03m%} )'
+
+  # * `%e`: evaluation depth.
+  local "$(echo elvl1    )="$'eval-lvl:%e '
+  local "$(echo _elvl1   )="$'eval-lvl:%e'
+  local "$(echo elvl2_2  )="$'%(2e.%{\e[32m%}'"$_elvl1"$'%{\e[39m%} .)'
+  local "$(echo elvl2_3  )="$'%(3e.%{\e[33m%}'"$_elvl1"$'%{\e[39m%} .'"$elvl2_2"$')'
+  local "$(echo elvl2_4  )="$'%(4e.%B%U%{\e[33m%}'"$_elvl1"$'%{\e[39m%}%u%b .'"$elvl2_3"$')'
+  local "$(echo elvl     )=$elvl2_4"
+
+  # * `%L`: shell nesting level.
+  local "$(echo shlvl1   )="$'lvl:%L '
+  local "$(echo _shlvl1  )="$'lvl:%L'
+  local "$(echo shlvl2   )="$'%(2L.%B%{\e[34m\e[95m%}'"$_shlvl1"$'%{\e[39m%}%b .'"$shlvl1"$')'
+  local "$(echo shlvl3   )="$'%(3L.%B%{\e[35m%}'"$_shlvl1"$'%{\e[39m%}%b .'"$shlvl2"$')'
+  local "$(echo shlvl4   )="$'%(4L.%B%U%{\e[36m%}'"$_shlvl1"$'%{\e[39m%}%u%b .'"$shlvl3"$')'
+  local "$(echo shlvl    )=$shlvl4"
+
+  # * `%!`: current history number.
+  # * `%i`: current line number.
+  #local "$(echo hist_info)="$'(%i) %!'
+  local "$(echo hist_info)="$'(%!) $(printf \'%3s\' ${==LINENO-$\'%{\e[31m%}\\$LINENO?%{\e[39m%}\'})'
+
+  export RPROMPT="${reset_escape_codes}${italics_begin}${exit_code}${elvl}${shlvl}%>…>${hist_info}%>>${italics_end}${reset_escape_codes}"
+
+  # ~~~~~~~~~~~~~~~~~~~
+  # Finishing routines.
+  # ===================
+
+  export PROMPT="${LPROMPT}"
+}
+
+function {
+  local -i no_bev_prompt="${NO_BEV_PROMPT-"$((false))"}"
+  if (( !$no_bev_prompt )); then
+    bev-prompt
+  fi
+}
+
+local source_filter='sed -nre /^autoload.*compinit/,$p'
+local source_filepath='/etc/zsh/newuser.zshrc.recommended'
+
+if [[ -e "${source_filepath}" ]]; then
+  source =($=source_filter "$source_filepath")
+else
+  local valid="$(sed -nre's/[[:space:]]//g;p' << $'\n'
+    913aa659085733318c6613701d96477fef843812b9759cb2daae4041772d72fb61ce2c29289c46f0842ecea596550b6274f64351c266ee394a1513c8a4c6613d
+  )"
+  local file_contents_src="$(cat << $'\0'
+    IyBTZXQgdXAgdGhlIHByb21wdAoKYXV0b2xvYWQgLVV6IHByb21wdGluaXQKcHJvbXB0aW5pdApw
+    cm9tcHQgYWRhbTEKCnNldG9wdCBoaXN0aWdub3JlYWxsZHVwcyBzaGFyZWhpc3RvcnkKCiMgVXNl
+    IGVtYWNzIGtleWJpbmRpbmdzIGV2ZW4gaWYgb3VyIEVESVRPUiBpcyBzZXQgdG8gdmkKYmluZGtl
+    eSAtZQoKIyBLZWVwIDEwMDAgbGluZXMgb2YgaGlzdG9yeSB3aXRoaW4gdGhlIHNoZWxsIGFuZCBz
+    YXZlIGl0IHRvIH4vLnpzaF9oaXN0b3J5OgpISVNUU0laRT0xMDAwClNBVkVISVNUPTEwMDAKSElT
+    VEZJTEU9fi8uenNoX2hpc3RvcnkKCiMgVXNlIG1vZGVybiBjb21wbGV0aW9uIHN5c3RlbQphdXRv
+    bG9hZCAtVXogY29tcGluaXQKY29tcGluaXQKCnpzdHlsZSAnOmNvbXBsZXRpb246KicgYXV0by1k
+    ZXNjcmlwdGlvbiAnc3BlY2lmeTogJWQnCnpzdHlsZSAnOmNvbXBsZXRpb246KicgY29tcGxldGVy
+    IF9leHBhbmQgX2NvbXBsZXRlIF9jb3JyZWN0IF9hcHByb3hpbWF0ZQp6c3R5bGUgJzpjb21wbGV0
+    aW9uOionIGZvcm1hdCAnQ29tcGxldGluZyAlZCcKenN0eWxlICc6Y29tcGxldGlvbjoqJyBncm91
+    cC1uYW1lICcnCnpzdHlsZSAnOmNvbXBsZXRpb246KicgbWVudSBzZWxlY3Q9MgpldmFsICIkKGRp
+    cmNvbG9ycyAtYikiCnpzdHlsZSAnOmNvbXBsZXRpb246KjpkZWZhdWx0JyBsaXN0LWNvbG9ycyAk
+    eyhzLjouKUxTX0NPTE9SU30KenN0eWxlICc6Y29tcGxldGlvbjoqJyBsaXN0LWNvbG9ycyAnJwp6
+    c3R5bGUgJzpjb21wbGV0aW9uOionIGxpc3QtcHJvbXB0ICVTQXQgJXA6IEhpdCBUQUIgZm9yIG1v
+    cmUsIG9yIHRoZSBjaGFyYWN0ZXIgdG8gaW5zZXJ0JXMKenN0eWxlICc6Y29tcGxldGlvbjoqJyBt
+    YXRjaGVyLWxpc3QgJycgJ206e2Eten09e0EtWn0nICdtOnthLXpBLVp9PXtBLVphLXp9JyAncjp8
+    Wy5fLV09KiByOnw9KiBsOnw9KicKenN0eWxlICc6Y29tcGxldGlvbjoqJyBtZW51IHNlbGVjdD1s
+    b25nCnpzdHlsZSAnOmNvbXBsZXRpb246Kicgc2VsZWN0LXByb21wdCAlU1Njcm9sbGluZyBhY3Rp
+    dmU6IGN1cnJlbnQgc2VsZWN0aW9uIGF0ICVwJXMKenN0eWxlICc6Y29tcGxldGlvbjoqJyB1c2Ut
+    Y29tcGN0bCBmYWxzZQp6c3R5bGUgJzpjb21wbGV0aW9uOionIHZlcmJvc2UgdHJ1ZQoKenN0eWxl
+    ICc6Y29tcGxldGlvbjoqOio6a2lsbDoqOnByb2Nlc3NlcycgbGlzdC1jb2xvcnMgJz0oI2IpICMo
+    WzAtOV0jKSo9MD0wMTszMScKenN0eWxlICc6Y29tcGxldGlvbjoqOmtpbGw6KicgY29tbWFuZCAn
+    cHMgLXUgJFVTRVIgLW8gcGlkLCVjcHUsdHR5LGNwdXRpbWUsY21kJwo=
+  )"
+  local file_contents=''
+  local char
+  <<(base64 -d -i <<(printf '%s' "$file_contents_src")) \
+    while read -k1 -ru0 char; do
+      file_contents+="${char}"
+    done
+
+  declare -ga virtual_file_newuser_zshrc_recommended
+  virtual_file_newuser_zshrc_recommended+="${file_contents}"
+
+  local checksum="$(  >>(sed -nre's/^[[:space:]]*([^[:space:]]+).*$/\1/p') \
+                    sha512sum \
+                      <<(printf '%s' "$file_contents")
+                  )"
+
+  if [[ "${checksum}" != "${valid}" ]]; then
+    1>&2 {
+      printf $'%s: %s \'%s\': %s\\n' \
+        "$0" \
+        "Sorry, not sourcing virtual file" \
+        "$source_filepath" \
+        "the checksum doesn't match!"
+      printf $'  Checksum: %s…\n' "${checksum[1,32]}"
+      printf $'  Expected: %s…\n' "${valid[1,32]}"
+    }
+    false
+  else
+    printf $'%s: file \'%s\' doesn\'t exist.\nVirtually sourcing after filtering \'%s\'.\n' \
+      "$0" \
+      "${source_filepath}" \
+      'virtual_file_newuser_zshrc_recommended'
+    source =($=source_filter <<(printf '%s' "$file_contents"))
+  fi
+fi
+
+
+##source /etc/zsh/newuser.zshrc.recommended
+##prompt pws
+## Only load completion part of the file.
+#source =(sed -nre '/^autoload.*compinit/,$p' '/etc/zsh/newuser.zshrc.recommended')
+
+
+
+##source /etc/zsh/newuser.zshrc.recommended
+##prompt pws
+## Only load completion part of the file.
+#source =(sed -nre '/^autoload.*compinit/,$p' '/etc/zsh/newuser.zshrc.recommended')

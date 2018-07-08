@@ -1,0 +1,7 @@
+if [[ -z "$PATH" || "$PATH" == "/bin:/usr/bin" ]]; then
+  if ! [[ "${==EUID-x}" == '0' || "${==EGID}" == "$(getent group admin | cut -d: -f3)" ]]; then
+    export PATH="/usr/local/bin:/usr/bin:/bin:/usr/games"
+  else
+    export PATH="/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin:/usr/games"
+  fi
+fi

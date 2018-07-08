@@ -1,0 +1,32 @@
+Defaults !tty_tickets
+
+#Defaults passprompt="[sudo] ATTN %u: ENTER PASSWORD TO OBTAIN %U's ᵇᵉᶰᵉᵛᵒᶫᵉᶰᵗ DESTRUCTIVE SUPERPOWERS OVER %h!!!!!!!!\nType your password-DO IT DO DO IT!!!\nHere, I made a nice box for you to put it in: "
+#Defaults passprompt="[sudo] (%p⇠%u→%U) password to ideally not accidentally %h: "
+Defaults passprompt="[sudo] (%p⇠%u→%U) password to ideally not accidentally %h: [47m[31m❤[39m[49m[1D"
+
+Defaults  always_set_home
+Defaults	env_reset
+#Defaults	mail_badpass
+Defaults	!mail_badpass
+Defaults	secure_path="/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin"
+#Defaults  insults
+Defaults  !insults
+Defaults  badpass_message="E\
+[31m❤[39m 'Tis a lesson you should heed: [31m❤[39m\
+  E\
+[31m❤[39m [03mTry, try, try again.[23m           [31m❤[39m\
+  E\
+[31m❤[39m If at first you don't succeed, [31m❤[39m\
+  E\
+[31m❤[39m [03mTry, try, try again.[23m           [31m❤[39m\
+  MMMMM\
+"
+
+# Default is 15.  Unit is minutes.
+Defaults  timestamp_timeout=15
+
+Defaults  lecture=once
+#Defaults  lecture=always
+Defaults  lecture_file="/var/local/lib/sudo/lecture/lecture_file.txt"
+
+Defaults env_keep+="DISPLAY TMUX TMUX_ TMUX_PANE TMUX_SESSIONS"
