@@ -8,6 +8,9 @@ class bairyn {
 		include bairyn::dev_base
 		include bairyn::utils
 		include bairyn::cli
+		include bairyn::network
+		include bairyn::applications
+		include bairyn::games
 	}
 
 	class meta {
@@ -20,6 +23,18 @@ class bairyn {
 
 		package { $puppet:
 			ensure => installed,
+		}
+
+		case $::operatingsystem {
+			'fedora': {
+			}
+			'ubuntu': {
+				package { 'aptitude': ensure => installed, }
+			}
+			'archlinux': {
+			}
+			default: {
+			}
 		}
 	}
 
@@ -41,12 +56,51 @@ class bairyn {
 		package { 'ed': ensure => installed, }
 		package { 'ghc': ensure => installed, }
 		package { 'cabal-install': ensure => installed, }
-		package { 'rust': ensure => installed, }
 		package { 'cargo': ensure => installed, }
 		package { 'ruby': ensure => installed, }
 		package { 'python3': ensure => installed, }
-		package { 'lua': ensure => installed, }
-		package { 'R': ensure => installed, }
+
+		case $::operatingsystem {
+			'fedora': {
+				package { 'R': ensure => installed, }
+			}
+			'ubuntu': {
+				package { 'r-base': ensure => installed, }
+			}
+			'archlinux': {
+				package { 'R': ensure => installed, }
+			}
+			default: {
+				package { 'R': ensure => installed, }
+			}
+		}
+
+		case $::operatingsystem {
+			'fedora': {
+				package { 'lua': ensure => installed, }
+			}
+			'ubuntu': {
+				package { 'lua5.3': ensure => installed, }
+				package { 'lua5.2': ensure => installed, }
+				package { 'lua5.1': ensure => installed, }
+				package { 'lua50': ensure => installed, }
+			}
+			'archlinux': {
+				package { 'lua': ensure => installed, }
+			}
+			default: {
+				package { 'lua': ensure => installed, }
+			}
+		}
+
+		$rust = $::operatingsystem ? {
+			'fedora'    => 'rust',
+			'ubuntu'    => 'rustc',
+			'archlinux' => 'rust',
+			default     => 'rust',
+		}
+
+		package { $rust: ensure => installed, }
 	}
 
 	class utils {
