@@ -35,3 +35,6 @@ gsettings set org.gnome.desktop.input-sources xkb-options "['ctrl:nocaps']"
 gsettings set org.gnome.desktop.peripherals.keyboard delay "150"
 gsettings set org.gnome.desktop.peripherals.keyboard repeat-interval "16"
 #setxkbmap dvorak -option ctrl:nocaps && xset r rate 150 64
+
+# Disable natural scrolling, for the touchpad.
+gsettings set org.gnome.desktop.peripherals.touchpad natural-scroll false
