@@ -110,6 +110,8 @@ class bairyn {
 		package { 'smartmontools': ensure => installed, }
 		package { 'ncdu': ensure => installed, }
 		package { 'tree': ensure => installed, }
+		package { 'xsel': ensure => installed, }
+		package { 'xclip': ensure => installed, }
 	}
 
 	class cli {
