@@ -9,11 +9,6 @@ setopt histignorealldups sharehistory
 # Use emacs keybindings even if our EDITOR is set to vi
 bindkey -e
 
-# Keep 1000 lines of history within the shell and save it to ~/.zsh_history:
-HISTSIZE=1000
-SAVEHIST=1000
-HISTFILE=~/.zsh_history
-
 # Use modern completion system
 autoload -Uz compinit
 compinit
@@ -35,3 +30,44 @@ zstyle ':completion:*' verbose true
 
 zstyle ':completion:*:*:kill:*:processes' list-colors '=(#b) #([0-9]#)*=0=01;31'
 zstyle ':completion:*:kill:*' command 'ps -u $USER -o pid,%cpu,tty,cputime,cmd'
+
+# History options.
+
+## Keep 1,000,000,000 lines of history within the shell and save it to ~/.zsh_history:
+HISTSIZE=1000000000
+SAVEHIST=1000000000
+HISTFILE=~/.zsh_history
+setopt hist_ignore_space  # Forget lines beginning with a space.
+setopt no_hist_no_store  # Don't remove "history" commands from the history for some reason.
+setopt hist_expire_dups_first  # TODO
+setopt hist_fcntl_lock  # TODO
+setopt no_hist_reduce_blanks  # Don't remove superfluous spaces.
+setopt hist_verify  # If "!" is entered unexpanded, replace it with the command
+                    # first on the prompt, before executing it immediately.
+
+## Make parallel zsh sessions' histories more accessible to each other.
+setopt no_share_history
+setopt append_history
+setopt inc_append_history
+setopt inc_append_history_time
+
+# File globbing: support ^, ~, and #.
+setopt extended_glob
+
+# Automatically pushd with cd.
+setopt auto_pushd
+
+# Correction.
+setopt no_correct      # Command.
+setopt no_correct_all  # Command and arguments.  (It seems to be based on files
+                       # in the current directory?  Probably not worth setting
+                       # with "correct".)
+setopt dvorak          # Use the dvorak keyboard layout as the basis for spell correction suggestions.
+
+# Ignore comments on the interactive command line too.
+setopt interactive_comments
+
+# ls aliases.
+alias ll='ls -alF'
+alias la='ls -A'
+alias l='ls -CF'
