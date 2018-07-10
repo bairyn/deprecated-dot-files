@@ -155,6 +155,10 @@ class bairyn {
 		}
 	}
 
+	class gui {
+		package { 'dconf-tools': ensure => installed, }
+	}
+
 	class applications {
 		package { 'firefox': ensure => installed, }
 		package { 'anki': ensure => installed, }
