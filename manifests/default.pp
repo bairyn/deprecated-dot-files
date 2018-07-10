@@ -1,3 +1,6 @@
+# Run this file with "puppet apply manifests/default.pp", to apply it with
+# puppet.
+# vim: noet
 include bairyn::all
 
 class bairyn {
@@ -30,6 +33,7 @@ class bairyn {
 			}
 			'ubuntu': {
 				package { 'aptitude': ensure => installed, }
+				package { 'apt-file': ensure => installed, }
 			}
 			'archlinux': {
 			}
@@ -130,20 +134,43 @@ class bairyn {
 	}
 
 	class network {
-		package { 'openssh': ensure => installed, }
 		package { 'rsync': ensure => installed, }
 		package { 'nmap': ensure => installed, }
 		package { 'iptables': ensure => installed, }
+
+		case $::operatingsystem {
+			'fedora': {
+				package { 'openssh': ensure => installed, }
+			}
+			'ubuntu': {
+				package { 'openssh-client': ensure => installed, }
+				package { 'openssh-server': ensure => installed, }
+			}
+			'archlinux': {
+				package { 'openssh': ensure => installed, }
+			}
+			default: {
+				package { 'openssh': ensure => installed, }
+			}
+		}
 	}
 
 	class applications {
 		package { 'firefox': ensure => installed, }
-		package { 'chromium': ensure => installed, }
 		package { 'anki': ensure => installed, }
 		package { 'keepassx': ensure => installed, }
 		package { 'feh': ensure => installed, }
 		package { 'evince': ensure => installed, }
 		package { 'okular': ensure => installed, }
+		package { 'gnome-tweak-tool': ensure => installed, }
+
+		$chromium = $::operatingsystem ? {
+			'fedora'    => 'chromium',
+			'ubuntu'    => 'chromium-browser',
+			'archlinux' => 'chromium',
+			default     => 'chromium',
+		}
+		package { $chromium: ensure => installed, }
 
 		case $::operatingsystem {
 			'fedora': {
