@@ -116,6 +116,7 @@ class bairyn {
 		package { 'tree': ensure => installed, }
 		package { 'xsel': ensure => installed, }
 		package { 'xclip': ensure => installed, }
+		package { 'lynx': ensure => installed, }
 	}
 
 	class cli {
