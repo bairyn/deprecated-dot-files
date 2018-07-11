@@ -157,6 +157,7 @@ class bairyn {
 
 	class gui {
 		package { 'dconf-tools': ensure => installed, }
+		package { 'arandr': ensure => installed, }
 	}
 
 	class applications {
@@ -195,5 +196,6 @@ class bairyn {
 	class games {
 		package { 'neverball': ensure => installed, }
 		package { 'crawl': ensure => installed, }
+		package { 'wesnoth': ensure => installed, }
 	}
 }
