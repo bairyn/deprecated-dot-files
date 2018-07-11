@@ -165,9 +165,11 @@ class bairyn {
 		package { 'anki': ensure => installed, }
 		package { 'keepassx': ensure => installed, }
 		package { 'feh': ensure => installed, }
+		package { 'gnome-tweak-tool': ensure => installed, }
 		package { 'evince': ensure => installed, }
 		package { 'okular': ensure => installed, }
-		package { 'gnome-tweak-tool': ensure => installed, }
+		package { 'mupdf': ensure => installed, }
+		package { 'mupdf-tools': ensure => installed, }
 
 		$chromium = $::operatingsystem ? {
 			'fedora'    => 'chromium',
