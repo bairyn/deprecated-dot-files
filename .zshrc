@@ -57,6 +57,9 @@ setopt extended_glob
 # Automatically pushd with cd.
 setopt auto_pushd
 
+# Allow directories to be changed into with an implied "cd".
+setopt auto_cd
+
 # Correction.
 setopt no_correct      # Command.
 setopt no_correct_all  # Command and arguments.  (It seems to be based on files
