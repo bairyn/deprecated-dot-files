@@ -63,6 +63,8 @@ class bairyn {
 		package { 'cargo': ensure => installed, }
 		package { 'ruby': ensure => installed, }
 		package { 'python3': ensure => installed, }
+		package { 'binwalk': ensure => installed, }
+		package { 'flex': ensure => installed, }
 
 		case $::operatingsystem {
 			'fedora': {
