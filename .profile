@@ -27,6 +27,11 @@ if [ -d "$HOME/.local/bin" ] ; then
     PATH="$HOME/.local/bin:$PATH"
 fi
 
+# set PATH so it includes user's cargo bin if it exists
+if [ -d "$HOME/.cargo/bin" ] ; then
+    PATH="$HOME/.cargo/bin:$PATH"
+fi
+
 # Gnome configuration.
 # Set capslock as a control (c.f. https://askubuntu.com/a/633539).
 # setxkbmap dvorak -option ctrl:nocaps && xset r rate 150 64
