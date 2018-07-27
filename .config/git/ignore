@@ -1,0 +1,24 @@
+# Ignore MESSAGE files, which I use to write git commit messages.
+/MESSAGE
+
+#------------------------------------------------------------------------------
+# vim
+# https://raw.githubusercontent.com/github/gitignore/aeee031f9295c0ecd6ff285f2551dcb2a8eff8c5/Global/Vim.gitignore
+
+# Swap
+[._]*.s[a-v][a-z]
+[._]*.sw[a-p]
+[._]s[a-rt-v][a-z]
+[._]ss[a-gi-z]
+[._]sw[a-p]
+
+# Session
+Session.vim
+
+# Temporary
+.netrwhist
+*~
+# Auto-generated tag files
+tags
+# Persistent undo
+[._]*.un~

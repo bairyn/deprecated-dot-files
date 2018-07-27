@@ -1,2 +1,3 @@
 # Ignore viminfo, in case .vim is symlinked.
 /.vim/viminfo
+/.vim/.netrwhist
