@@ -74,3 +74,6 @@ setopt interactive_comments
 alias ll='ls -alF'
 alias la='ls -A'
 alias l='ls -CF'
+
+# Other aliases.
+alias cl="clear && tmux clear-history"  # Clear the screen.

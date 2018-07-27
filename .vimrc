@@ -61,6 +61,9 @@ set showtabline=2
 "
 " This section includes default indentation settings.
 
+" Respect files' vim settings.
+set modeline
+
 "" noexpandtab: Don't replace tabs with spaces.
 set noet
 "" Tabs for indentation, and spaces for alignment.
