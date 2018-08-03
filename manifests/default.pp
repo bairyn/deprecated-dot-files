@@ -75,6 +75,7 @@ class bairyn {
 		package { 'libncurses5-dev': ensure => installed, }
 		package { 'libssl-dev': ensure => installed, }
 		package { 'ccache': ensure => installed, }
+		package { 'libelf-dev': ensure => installed, }
 
 		case $::operatingsystem {
 			'fedora': {
