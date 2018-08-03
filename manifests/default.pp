@@ -65,6 +65,7 @@ class bairyn {
 		package { 'ruby': ensure => installed, }
 		package { 'python3': ensure => installed, }
 		package { 'binwalk': ensure => installed, }
+		package { 'exuberant-ctags': ensure => installed, }
 		package { 'flex': ensure => installed, }
 		package { 'bison': ensure => installed, }
 		# Packages for kernel dev on Ubuntu (https://wiki.ubuntu.com/KernelTeam/GitKernelBuild)
