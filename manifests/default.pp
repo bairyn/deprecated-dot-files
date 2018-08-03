@@ -67,6 +67,14 @@ class bairyn {
 		package { 'binwalk': ensure => installed, }
 		package { 'flex': ensure => installed, }
 		package { 'bison': ensure => installed, }
+		# Packages for kernel dev on Ubuntu (https://wiki.ubuntu.com/KernelTeam/GitKernelBuild)
+		#package { 'git': ensure => installed, }  # (Already in manifest.)
+		package { 'build-essential': ensure => installed, }
+		package { 'kernel-package': ensure => installed, }
+		package { 'fakeroot': ensure => installed, }
+		package { 'libncurses5-dev': ensure => installed, }
+		package { 'libssl-dev': ensure => installed, }
+		package { 'ccache': ensure => installed, }
 
 		case $::operatingsystem {
 			'fedora': {
