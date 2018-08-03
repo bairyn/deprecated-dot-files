@@ -66,6 +66,7 @@ class bairyn {
 		package { 'python3': ensure => installed, }
 		package { 'binwalk': ensure => installed, }
 		package { 'flex': ensure => installed, }
+		package { 'bison': ensure => installed, }
 
 		case $::operatingsystem {
 			'fedora': {
