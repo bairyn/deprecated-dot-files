@@ -1,0 +1,137 @@
+# # Key bindings in command mode.
+# Run 'lesskey' to produce /.less, for configuration for less.
+
+#command
+
+# ## New key bindings.
+
+# Alt-/: begin a search for text at the beginning of a line, ignoring
+#        whitespace.
+\e/ forw-search \^[[:space:]]*
+\e? back-search \^[[:space:]]*
+
+# Overridden defaults: move to same with shift modifier.
+\E/ forw-search *
+\E? back-search *
+
+# ## Key binding swaps.
+# This is commented out.
+
+## ## Dvorak key binding swaps.
+##
+## These preserve the position on the keyboard of the more prominent of key
+## bindings for positionally, rather than mneumonically, associated command
+## keys.
+#
+## ### Movement and scrolling.
+#
+## `j` <-> `h`
+## `J` <-> `H`
+## `k` <-> `t`
+## `K` <-> `T`
+##h forw-line
+##t back-line
+##H forw-line-force
+##T back-line-force
+#h forw-line-force
+#t back-line-force
+#^E forw-line-force
+#^Y back-line-force
+#
+##j help
+##k next-tag
+##J help
+##K next-tag
+#H help
+#k next-tag
+#K prev-tag
+#
+## #### Using the dvorak keyboard layout, 
+#
+## ### Searching.
+#
+## 'n' <-> 'l'
+#l    repeat-search
+#\el  repeat-search-all
+#L    reverse-search
+#\eL  reverse-search-all
+#
+##n    (unbound)
+##\en  (unbound)
+##N    (unbound)
+##\eN  (unbound)
+#
+#
+## ## Dvorak domino-bindings
+##
+## Some key binding swaps result in inconvenient key maps, e.g. the overriding
+## of `t` and `T` for `next-tag` and `previous-tag`.
+##
+## This section defines key bindings for more convenient key maps, where
+## multiple bindings categorized under a single conceptual module are more
+## accessibly grouped.
+#
+## ### Tags.
+#
+## `*` and `#` are analogous, not but too conceptually different for me to feel
+## satisfied with using them for tag key bindings in less.
+#
+### `\043` refers to `#`.
+##*    next-tag
+##\043 previous-tag
+#
+##TODO next-tag
+##TODO previous-tag
+#
+## ### Help page.
+#:h help
+#:H help
+#:? help
+#
+#^h   help
+#^H   help
+#\eh  help
+#\eH  help
+#\e^h help
+#\e^H help
+#
+#^?   help
+#\e?  help
+#\e^? help
+
+
+# # Key bindings in line-edit mode.
+
+#line-edit
+
+
+# # Environment variables 
+
+#env
+
+# ## Default command-line options to virtually pass to less.
+#
+# Options:
+# * -i:         Case insensitive searches iff pattern is all lowercase.
+# * -s:         Wrap long lines
+# * -c:         Clear screen by repainting, not scrolling.
+# * -r (-[rR]): Print all control characters in raw form.
+# * -R (-[rR]): Print ANSI (color) escape sequences in raw form.
+# * -q (-[qQ]): Don't ring bell on attempts to scroll beyond eof/bog.
+# * -Q (-[qQ]): Don't ring bell on any error.
+# * -X:         Don't clear screen on exit.  tmux's "alternate-screen" option
+#               is recommended as an alternative.
+#
+#               See also
+#               https://blogs.oracle.com/peteh/entry/fixing_terminfo_so_that_terminal .
+#               Also search for "smcup" and "rmcup".
+#
+# Initial commands; `++` applies to every file.
+#
+# * `++g`:
+#       Scroll to the beginning to automatically position the first line on
+#       at the top of of the terminal on startup.
+LESS = -iscRQ ++gr
+# Maximum history size: 100 (default for less-v458) -> 1000.
+LESSHISTSIZE = 1000
+LESSGLOBALTAGS = global

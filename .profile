@@ -43,3 +43,6 @@ gsettings set org.gnome.desktop.peripherals.keyboard repeat-interval "16"
 
 # Enable natural scrolling, for the touchpad.
 gsettings set org.gnome.desktop.peripherals.touchpad natural-scroll true
+
+# Configure ".lesskey".
+lesskey
