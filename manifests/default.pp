@@ -123,6 +123,7 @@ class bairyn {
 
 	class utils {
 		package { 'htop': ensure => installed, }
+		package { 'iotop': ensure => installed, }
 		#package { 'fontutils': ensure => installed, }
 		package { 'findutils': ensure => installed, }
 		package { 'smartmontools': ensure => installed, }
