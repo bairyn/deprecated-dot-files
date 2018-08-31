@@ -122,6 +122,7 @@ class bairyn {
 	}
 
 	class utils {
+		package { 'parallel': ensure => installed, }
 		package { 'htop': ensure => installed, }
 		package { 'iotop': ensure => installed, }
 		package { 'glances': ensure => installed, }
