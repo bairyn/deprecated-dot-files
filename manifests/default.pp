@@ -190,6 +190,7 @@ class bairyn {
 		package { 'mupdf-tools': ensure => installed, }
 		package { 'mplayer': ensure => installed, }
 		package { 'vlc': ensure => installed, }
+		package { 'contextfree': ensure => installed, }
 
 		$chromium = $::operatingsystem ? {
 			'fedora'    => 'chromium',
