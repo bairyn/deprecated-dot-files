@@ -77,6 +77,7 @@ class bairyn {
 		package { 'libssl-dev': ensure => installed, }
 		package { 'ccache': ensure => installed, }
 		package { 'libelf-dev': ensure => installed, }
+		package { 'moreutils': ensure => installed, }
 
 		case $::operatingsystem {
 			'fedora': {
