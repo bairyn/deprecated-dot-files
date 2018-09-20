@@ -193,6 +193,9 @@ class bairyn {
 		package { 'mplayer': ensure => installed, }
 		package { 'vlc': ensure => installed, }
 		package { 'contextfree': ensure => installed, }
+		package { 'coq': ensure => installed, }
+		package { 'coq-doc': ensure => installed, }
+		package { 'coqide': ensure => installed, }
 
 		$chromium = $::operatingsystem ? {
 			'fedora'    => 'chromium',
