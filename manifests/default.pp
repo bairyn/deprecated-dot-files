@@ -200,6 +200,7 @@ class bairyn {
 		# c.f. https://proofgeneral.github.io/ https://coq.inria.fr/tutorial-nahas
 		package { 'proofgeneral': ensure => installed, }
 		package { 'proofgeneral-doc': ensure => installed, }
+		package { 'rlwrap': ensure => installed, }
 
 		$chromium = $::operatingsystem ? {
 			'fedora'    => 'chromium',
