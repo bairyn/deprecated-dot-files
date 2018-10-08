@@ -1,3 +1,5 @@
+; Copy this file to .emacs, since it is automatically modified.
+
 ; https://proofgeneral.github.io/
 ; To install:
 ; > Then, run M-x package-refresh-contents RET followed by M-x package-install
