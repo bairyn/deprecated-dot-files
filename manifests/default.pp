@@ -196,6 +196,10 @@ class bairyn {
 		package { 'coq': ensure => installed, }
 		package { 'coq-doc': ensure => installed, }
 		package { 'coqide': ensure => installed, }
+		# Proof general: coq for emacs.
+		# c.f. https://proofgeneral.github.io/ https://coq.inria.fr/tutorial-nahas
+		package { 'proofgeneral': ensure => installed, }
+		package { 'proofgeneral-doc': ensure => installed, }
 
 		$chromium = $::operatingsystem ? {
 			'fedora'    => 'chromium',
