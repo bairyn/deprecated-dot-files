@@ -1,0 +1,6 @@
+# https://askubuntu.com/a/982865
+XKBLAYOUT="us,us"
+XKBVARIANT="dvorak,"
+BACKSPACE="guess"
+XKBMODEL="pc105"
+XKBOPTIONS="grp:alt_shift_toggle,grp_led:scroll,ctrl:nocaps"
