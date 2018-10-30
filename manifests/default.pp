@@ -136,6 +136,8 @@ class bairyn {
 		package { 'xclip': ensure => installed, }
 		package { 'lynx': ensure => installed, }
 		package { 'whois': ensure => installed, }
+		package { 'wget': ensure => installed, }
+		package { 'curl': ensure => installed, }
 	}
 
 	class cli {
