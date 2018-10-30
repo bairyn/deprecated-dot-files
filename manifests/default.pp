@@ -224,6 +224,12 @@ class bairyn {
 				# TODO: can you emit an info/notice message here?
 			}
 		}
+
+		# Latex.
+		package { 'texlive': ensure => installed, }
+		package { 'texlive-latex-base': ensure => installed, }
+		package { 'python-pygments': ensure => installed, }  # For "minted" package.
+		                                                     # https://tex.stackexchange.com/a/116599
 	}
 
 	class games {
