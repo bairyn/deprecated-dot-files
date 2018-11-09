@@ -138,6 +138,7 @@ class bairyn {
 		package { 'whois': ensure => installed, }
 		package { 'wget': ensure => installed, }
 		package { 'curl': ensure => installed, }
+		package { 'xdotool': ensure => installed, }
 	}
 
 	class cli {
