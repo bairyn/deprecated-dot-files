@@ -77,3 +77,5 @@ alias l='ls -CF'
 
 # Other aliases.
 alias cl="clear && tmux clear-history"  # Clear the screen.
+alias -g L="| less"  # Allow e.g. "dmesg L" as shorthand for "dmesg | less".
+alias -g V="| vipe"  # Allow e.g. "dmesg V" as shorthand for "dmesg | vipe".
