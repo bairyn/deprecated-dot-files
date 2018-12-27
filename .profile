@@ -17,25 +17,30 @@ if [ -n "$BASH_VERSION" ]; then
     fi
 fi
 
-# set PATH so it includes user's cargo bin if it exists
-if [ -d "$HOME/.cargo/bin" ] ; then
-    PATH="$HOME/.cargo/bin:$PATH"
-fi
-
-# set PATH so it includes user's cabal bin if it exists
-if [ -d "$HOME/.cabal/bin" ] ; then
-    PATH="$HOME/.cabal/bin:$PATH"
-fi
-
-# set PATH so it includes user's private bin if it exists
-if [ -d "$HOME/bin" ] ; then
-    PATH="$HOME/bin:$PATH"
-fi
-
-# set PATH so it includes user's private bin if it exists
-if [ -d "$HOME/.local/bin" ] ; then
-    PATH="$HOME/.local/bin:$PATH"
-fi
+# Add directories to PATH.
+hi() {
+	local -a mypaths=(
+		"${HOME}/.cargo/bin"  # cargo for rust
+		"${HOME}/.cabal/bin"  # cabal for Haskell
+		"${HOME}/bin"         # user bin
+		"${HOME}/.local/bin"  # user bin
+		"/opt/ghc/bin"        # https://launchpad.net/~hvr/+archive/ubuntu/ghc
+	)
+	((${#mypaths[@]} <= 0)) || \
+	for mypath in "${mypaths[@]}"; do
+		if ! [ -d "${mypath}" ]; then
+			:
+			1>&2 echo "Warning: not adding to PATH non-existent directory '${mypath}'"
+		else
+			if grep -Fq ":${mypath}:" <<< "${PATH}"; then
+				:
+				1>&2 echo "Warning: not adding duplicate entry to PATH for directory '${mypath}'"
+			else
+				PATH="${mypath}:${PATH}"
+			fi
+		fi
+	done
+} && hi
 
 # Gnome configuration.
 # Set capslock as a control (c.f. https://askubuntu.com/a/633539).
