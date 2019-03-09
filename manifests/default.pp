@@ -79,6 +79,8 @@ class bairyn {
 		package { 'libelf-dev': ensure => installed, }
 		package { 'moreutils': ensure => installed, }
 		package { 'clang': ensure => installed, }
+		package { 'gnuplot': ensure => installed, }
+		package { 'gnuplot-doc': ensure => installed, }
 
 		case $::operatingsystem {
 			'fedora': {
