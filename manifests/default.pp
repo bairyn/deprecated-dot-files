@@ -142,6 +142,7 @@ class bairyn {
 		package { 'wget': ensure => installed, }
 		package { 'curl': ensure => installed, }
 		package { 'xdotool': ensure => installed, }
+		package { 'scrot': ensure => installed, }
 	}
 
 	class cli {
