@@ -208,6 +208,7 @@ class bairyn {
 		package { 'proofgeneral': ensure => installed, }
 		package { 'proofgeneral-doc': ensure => installed, }
 		package { 'rlwrap': ensure => installed, }
+		package { 'qemu': ensure => installed, }
 
 		$chromium = $::operatingsystem ? {
 			'fedora'    => 'chromium',
