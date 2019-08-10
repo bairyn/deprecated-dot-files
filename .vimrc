@@ -159,6 +159,9 @@ set nohlsearch
 set ignorecase
 " }}}
 
+" TODO: organize
 set hidden
+" <C-space> doesn't seem to work with vim.
+inoremap <C-@> <ESC>l
 
 " vim:foldmethod=marker:foldlevel=0 tw=79 noet

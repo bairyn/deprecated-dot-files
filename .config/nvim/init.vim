@@ -5,3 +5,4 @@ source ~/.vimrc
 
 " nvim-specific configuration.
 inoremap <M-l> <ESC>l
+inoremap <C-space> <ESC>l
