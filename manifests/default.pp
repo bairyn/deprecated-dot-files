@@ -143,6 +143,9 @@ class bairyn {
 		package { 'curl': ensure => installed, }
 		package { 'xdotool': ensure => installed, }
 		package { 'scrot': ensure => installed, }
+		package { 'watchdog': ensure => installed, }
+		package { 'xinetd': ensure => installed, }
+		#package { 'lrzsz': ensure => installed, }  # rb etc. don't seem to respond to SIGINT; don't install if not needed for convenience.
 	}
 
 	class cli {
