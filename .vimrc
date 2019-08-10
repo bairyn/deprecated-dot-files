@@ -114,6 +114,8 @@ autocmd BufRead,BufNewFile *.yaml setlocal formatoptions=croqtl et ts=2 sts=2 sw
 " TODO: ^^^ Implement what I noted here.  Until then, the mapping will be a bit
 "       arbitrary.
 
+" Don't limit tabs to the first 10 files.
+set tabpagemax=10000
 
 " M-h and M-t navigates buffers.
 nnoremap <C-h> :bn!<CR>
