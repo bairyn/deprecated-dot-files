@@ -68,6 +68,7 @@ class bairyn {
 		package { 'exuberant-ctags': ensure => installed, }
 		package { 'flex': ensure => installed, }
 		package { 'bison': ensure => installed, }
+		package { 'libelf-dev': ensure => installed, }
 		# Packages for kernel dev on Ubuntu (https://wiki.ubuntu.com/KernelTeam/GitKernelBuild)
 		#package { 'git': ensure => installed, }  # (Already in manifest.)
 		package { 'build-essential': ensure => installed, }
