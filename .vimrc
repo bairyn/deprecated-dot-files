@@ -164,4 +164,14 @@ set hidden
 " <C-space> doesn't seem to work with vim.
 inoremap <C-@> <ESC>l
 
+" https://unix.stackexchange.com/questions/30665/gvim-p-limit-of-opened-tabs
+set tabpagemax=100
+
+" Search parent directories for tag files.
+set tags=tags;
+
+" https://stackoverflow.com/a/15124717
+" vim: set tmux windows.
+autocmd BufReadPost,FileReadPost,BufNewFile * call system("tmux rename-window " . expand("%"))
+
 " vim:foldmethod=marker:foldlevel=0 tw=79 noet
