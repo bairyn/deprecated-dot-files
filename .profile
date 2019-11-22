@@ -54,5 +54,9 @@ gsettings set org.gnome.desktop.peripherals.keyboard repeat-interval "16"
 # Enable natural scrolling, for the touchpad.
 gsettings set org.gnome.desktop.peripherals.touchpad natural-scroll true
 
+# Disable mouse acceleration.  c.f. https://askubuntu.com/questions/1065542/how-to-disable-mouse-acceleration-on-ubuntu-18-04
+#gsettings set org.gnome.desktop.peripherals.mouse accel-profile "default"
+gsettings set org.gnome.desktop.peripherals.mouse accel-profile "flat"
+
 # Configure ".lesskey".
 lesskey
