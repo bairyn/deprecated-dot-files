@@ -146,7 +146,7 @@ set wildmenu
 set scrolloff=8
 
 "" Allow the cursor to move one column beyond the last character in a line.
-set virtualedit=onemore
+set virtualedit=onemore,block,insert
 " }}}
 
 " Search settings. "{{{
