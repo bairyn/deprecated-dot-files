@@ -1,5 +1,6 @@
 " Type zR to open all folds in this file.
 " Type za to toggle an individual fold.
+" Type zM to close all folds in this file.
 
 " Appearance. "{{{
 " ----------------------------------------------------------------
@@ -54,6 +55,43 @@ set spell
 
 "" Always show tab line, even if there is only one tab.
 set showtabline=2
+
+" https://stackoverflow.com/a/15124717
+" vim: set tmux windows.
+let g:tmux_original_window_name = system("tmux display-message -p \"#W\"")[:-2]
+let g:tmux_window_max_length = 15
+function! TmuxRenameWindow(name)
+	if len(a:name) <= 0
+		let l:name2 = "vim"
+	else
+		let l:name2 = a:name
+	endif
+
+	if g:tmux_window_max_length >= 1 && len(l:name2) <= g:tmux_window_max_length - 1
+		let l:truncated_window_name = l:name2
+	else
+		"let l:truncated_window_name = "…" .  shellescape(l:name2)[0:(g:tmux_window_max_length - 2)]
+		let l:truncated_window_name = "…" .  l:name2[(-(g:tmux_window_max_length - 2)):]
+	endif
+	" automatic-rename is disabled after rename-window is called, so the
+	" set-window-option is not needed.
+	call system("tmux set-window-option automatic-rename on")
+	call system("tmux rename-window " . shellescape(l:truncated_window_name))
+endfunction
+
+function! TmuxRenameWindowRestore(tmux_original_window_name)
+	" (The first call is not needed.)
+	call system("tmux set-window-option automatic-rename on")
+	call system("tmux rename-window " . shellescape(a:tmux_original_window_name))
+	call system("tmux set-window-option automatic-rename on")
+endfunction
+
+augroup tmux
+	autocmd!
+	"autocmd BufReadPost,FileReadPost,BufNewFile * call system("tmux rename-window " . expand("%"))
+	autocmd BufEnter * call TmuxRenameWindow(expand("%"))
+	autocmd VimLeave * call TmuxRenameWindowRestore(g:tmux_original_window_name)
+augroup END
 " }}}
 
 " Indentation and formatting. "{{{
@@ -134,6 +172,13 @@ nnoremap <C-n> gt
 " C-k and C-j to open and close tabs.
 nnoremap <c-k> :tabnew<cr>:bn<cr>:bd #<cr>
 nnoremap <c-j> :tabclose<cr>
+
+"" Don't unload non-displayed buffers.
+set hidden
+
+"" Increase default number of tabs (10) that are loaded with `vim -p`.
+"" c.f. https://unix.stackexchange.com/questions/30665/gvim-p-limit-of-opened-tabs
+set tabpagemax=100
 " }}}
 
 " Commands. "{{{
@@ -147,6 +192,10 @@ set scrolloff=8
 
 "" Allow the cursor to move one column beyond the last character in a line.
 set virtualedit=onemore,block,insert
+
+"" Control-space exits insert mode.
+"" <C-space> doesn't seem to work with vim.
+inoremap <C-@> <ESC>l
 " }}}
 
 " Search settings. "{{{
@@ -157,21 +206,8 @@ set incsearch
 set nohlsearch
 "" Configure searches to be case-insensitive by default.
 set ignorecase
-" }}}
-
-" TODO: organize
-set hidden
-" <C-space> doesn't seem to work with vim.
-inoremap <C-@> <ESC>l
-
-" https://unix.stackexchange.com/questions/30665/gvim-p-limit-of-opened-tabs
-set tabpagemax=100
-
 " Search parent directories for tag files.
 set tags=tags;
-
-" https://stackoverflow.com/a/15124717
-" vim: set tmux windows.
-autocmd BufReadPost,FileReadPost,BufNewFile * call system("tmux rename-window " . expand("%"))
+" }}}
 
 " vim:foldmethod=marker:foldlevel=0 tw=79 noet
