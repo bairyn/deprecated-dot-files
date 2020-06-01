@@ -131,6 +131,14 @@ class bairyn {
 		package { 'htop': ensure => installed, }
 		package { 'iotop': ensure => installed, }
 		package { 'glances': ensure => installed, }
+		package { 'jnettop': ensure => installed, }  # on arch
+		package { 'ntop': ensure => installed, }  # on arch
+		package { 'nethogs': ensure => installed, }  # on arch
+		package { 'iftop': ensure => installed, }  # on arch
+		package { 'iptraf-ng': ensure => installed, }  # on arch
+		package { 'dstat': ensure => installed, }  # on arch
+		package { 'sysstat': ensure => installed, }  # on arch
+		package { 'xkbset': ensure => installed, }  # on arch (AUR), for BounceKeys.
 		#package { 'fontutils': ensure => installed, }
 		package { 'findutils': ensure => installed, }
 		package { 'smartmontools': ensure => installed, }
