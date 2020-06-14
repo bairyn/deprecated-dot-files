@@ -79,3 +79,92 @@ alias l='ls -CF'
 alias cl="clear && tmux clear-history"  # Clear the screen.
 alias -g L="| less"  # Allow e.g. "dmesg L" as shorthand for "dmesg | less".
 alias -g V="| vipe"  # Allow e.g. "dmesg V" as shorthand for "dmesg | vipe".
+
+# ssh-agent.
+# Simple way to temporarily force overriding these values rather than reading
+# from the environment.
+if false; then
+	export SSH_AGENT_SIMPLE="0"
+	export SSH_AGENT_SOURCE_PATH="${HOME}/.ssh-agent.source"
+	export SSH_AGENT_AUTO_START="1"
+	export SSH_AGENT_AUTO_ADD="1"
+	export SSH_AGENT_AUTO_CONNECT="1"
+fi
+export SSH_AGENT_SIMPLE="${SSH_AGENT_SIMPLE-"0"}"
+export SSH_AGENT_SOURCE_PATH="${SSH_AGENT_SOURCE_PATH:-"${HOME}/.ssh-agent.source"}"
+if test "${SSH_AGENT_SIMPLE:-0}" -ne "0" &>>/dev/null; then
+	export SSH_AUTH_SOCK="$(echo "/tmp/ssh-"*"/agent."*)"
+else
+	export SSH_AGENT_AUTO_START="${SSH_AGENT_AUTO_START-"1"}"
+	export SSH_AGENT_AUTO_ADD="${SSH_AGENT_AUTO_ADD-"1"}"
+	export SSH_AGENT_AUTO_CONNECT="${SSH_AGENT_AUTO_CONNECT-"1"}"
+	export SSH_AGENT_AUTO_CONNECT_AFTER_ADD="${SSH_AGENT_AUTO_CONNECT_AFTER_ADD-"1"}"
+
+	ssh-agent-is-running() {
+		set -o local_loops -o local_options -o local_patterns -o local_traps
+		set -uE -o pipefail
+
+		pgrep '^ssh-agent$' >>/dev/null && [[ -r "${SSH_AGENT_SOURCE_PATH}" ]] || return
+	}
+
+	ssh-agent-source() {
+		set -o local_loops -o local_options -o local_patterns -o local_traps
+		set -uE -o pipefail
+
+		source -- "${SSH_AGENT_SOURCE_PATH}" || return
+	}
+
+	ssh-agent-new() {
+		set -o local_loops -o local_options -o local_patterns -o local_traps
+		set -uE -o pipefail
+
+		ssh-agent > "${SSH_AGENT_SOURCE_PATH}" || return
+
+		if test "${SSH_AGENT_AUTO_ADD:-0}" -ne "0" &>>/dev/null; then
+			if test "${SSH_AGENT_AUTO_CONNECT_AFTER_ADD:-0}" -ne "0" &>>/dev/null; then
+				ssh-agent-source || return
+			else
+				(
+					ssh-agent-source || return
+					ssh-add || return
+				)
+			fi
+		fi
+	}
+
+	ssh-agent-restart() {
+		set -o local_loops -o local_options -o local_patterns -o local_traps
+		set -ueE -o pipefail
+
+		if ssh-agent-is-running; then
+			pkill '^ssh-agent$' || return
+		fi
+
+		ssh-agent-new || return
+	}
+
+	ssh-agent-ensure() {
+		set -o local_loops -o local_options -o local_patterns -o local_traps
+		set -uE -o pipefail
+
+		if ! ssh-agent-is-running; then
+			ssh-agent-new || return
+		fi
+	}
+
+	ssh-agent-connect() {
+		set -o local_loops -o local_options -o local_patterns -o local_traps
+		set -uE -o pipefail
+
+		ssh-agent-ensure || return
+		ssh-agent-source || return
+	}
+
+	if test "${SSH_AGENT_AUTO_START:-0}" -ne "0" &>>/dev/null; then
+		ssh-agent-ensure || printf '%s\n' "Failed to ensure ssh-agent is running."
+	fi
+
+	if test "${SSH_AGENT_AUTO_CONNECT:-0}" -ne "0" &>>/dev/null; then
+		ssh-agent-connect || printf '%s\n' "Failed to connect to ssh-agent."
+	fi
+fi
